@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: mypodhost
+spec:
+  restartPolicy: Never
+  containers:
+  - name: container1
+    image: busybox
+    command: ["sh"]
+    args: ["-c", "sleep 12345"]

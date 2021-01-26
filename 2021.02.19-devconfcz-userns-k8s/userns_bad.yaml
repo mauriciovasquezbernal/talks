@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: usernsbad
+spec:
+  restartPolicy: Never
+  userNamespaceMode: Cluster
+  containers:
+  - name: container1
+    image: mauriciovasquezbernal/cve-2019-5736

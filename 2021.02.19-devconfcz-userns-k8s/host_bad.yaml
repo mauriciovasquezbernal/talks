@@ -1,0 +1,9 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: hostbad
+spec:
+  restartPolicy: Never
+  containers:
+  - name: container1
+    image: mauriciovasquezbernal/cve-2019-5736
