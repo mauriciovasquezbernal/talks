@@ -52,15 +52,15 @@ Check the traces in Jaeger http://localhost:16686/.
 Start the server
 
 ```
-$ opentelemetry-instrument python server.py
+$ opentelemetry-instrument --trace-exporter=jaeger_thrift python server.py
 ```
 
 Perform some requests using the client
 
 ```
-$ opentelemetry-instrument python client.py Colombia
-$ opentelemetry-instrument python client.py Italy
-$ opentelemetry-instrument python client.py China
+$ opentelemetry-instrument --trace-exporter=jaeger_thrift python client.py Colombia
+$ opentelemetry-instrument --trace-exporter=jaeger_thrift python client.py Italy
+$ opentelemetry-instrument --trace-exporter=jaeger_thrift python client.py China
 ```
 
 Check the traces in Jaeger http://localhost:16686/.
