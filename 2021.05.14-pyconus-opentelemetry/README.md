@@ -9,7 +9,6 @@ This demo was tried with Python `3.7.4`.
 Start the required services with docker-compose
 
 ```
-$ cd 001-devopsdaysbogota2020-opentelemetry
 $ docker-compose up
 ```
 
