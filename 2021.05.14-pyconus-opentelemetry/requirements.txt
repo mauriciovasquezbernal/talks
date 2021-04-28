@@ -1,0 +1,10 @@
+wheel
+opentelemetry-api==1.1.0
+opentelemetry-exporter-jaeger==1.1.0
+opentelemetry-sdk==1.1.0
+opentelemetry-instrumentation==0.20b0
+opentelemetry-instrumentation-dbapi==0.20b0
+opentelemetry-instrumentation-flask==0.20b0
+opentelemetry-instrumentation-mysql==0.20b0
+opentelemetry-instrumentation-requests==0.20b0
+opentelemetry-instrumentation-wsgi==0.20b0
