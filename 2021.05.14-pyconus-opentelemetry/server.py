@@ -49,4 +49,5 @@ def get_continent():
     return sqlresult[0][1]
 
 if __name__ == "__main__":
-    app.run(port=5000)
+    #app.run(debug=True, use_reloader=False, port=5000)
+    app.run(debug=True, port=5000)

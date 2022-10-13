@@ -8,7 +8,7 @@
 
 #define ETH_P_IP 0x0800
 
-char __license[] SEC("license") = "Dual MIT/GPL";
+char __license[] SEC("license") = "GPL";
 
 struct v4_lpm_key {
 	u32 prefix_len;
