@@ -1,0 +1,123 @@
+# Based on https://github.com/se7entyse7en/prometheus-k8s-service-discovery/tree/master/kubernetes/prometheus
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: monitoring
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: tetragon
+  namespace: monitoring
+  annotations:
+    prometheus.io/scrape: "true"
+    prometheus.io/port: "2112"
+    prometheus.io/path: "/metrics"
+spec:
+  type: ExternalName
+  externalName: tetragon.kube-system.svc.cluster.local
+  ports:
+  - port: 2112
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  namespace: monitoring
+  name: prometheus
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: discoverer
+rules:
+- apiGroups: [""]
+  resources:
+  - nodes
+  - services
+  - endpoints
+  - pods
+  verbs: ["get", "list", "watch"]
+- apiGroups:
+  - extensions
+  resources:
+  - ingresses
+  verbs: ["get", "list", "watch"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: prometheus-discoverer
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: discoverer
+subjects:
+- kind: ServiceAccount
+  name: prometheus
+  namespace: monitoring
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: prometheus-server-conf
+  namespace: monitoring
+  labels:
+    name: prometheus-server-conf
+data:
+  prometheus.yml: |-
+    scrape_configs:
+      - job_name: 'tetragon'
+
+        scrape_interval: 1s
+        scrape_timeout: 1s
+
+        static_configs:
+        - targets:
+          - tetragon.kube-system.svc.cluster.local:2112
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: prometheus
+  namespace: monitoring
+  labels:
+    app: prometheus
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: prometheus
+  template:
+    metadata:
+      labels:
+        app: prometheus
+    spec:
+      serviceAccountName: prometheus
+      containers:
+      - name: prometheus
+        image: prom/prometheus:v2.33.4
+        ports:
+        - containerPort: 9090
+        volumeMounts:
+          - name: config
+            mountPath: /etc/prometheus
+      volumes:
+        - name: config
+          configMap:
+            name: prometheus-server-conf
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: prometheus
+  namespace: monitoring
+  labels:
+    app: prometheus
+spec:
+  type: NodePort
+  ports:
+  - port: 9090
+    targetPort: 9090
+    nodePort: 30090
+  selector:
+    app: prometheus

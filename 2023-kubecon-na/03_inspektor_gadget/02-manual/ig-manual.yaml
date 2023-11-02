@@ -1,0 +1,67 @@
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: ig-manual
+  labels:
+    app: ig-manual
+spec:
+  selector:
+    matchLabels:
+      app: ig-manual
+  template:
+    metadata:
+      labels:
+        app: ig-manual
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "2223"
+        prometheus.io/path: "/metrics"
+    spec:
+      hostPID: true
+      hostNetwork: true
+      containers:
+      - name: exporter
+        image: ghcr.io/mauriciovasquezbernal/ig:kubeconna2023
+        imagePullPolicy: Always
+        command: ["/bin/ig"]
+        #args: ["--auto-mount-filesystems", "run", "dns"]
+        args: ["--auto-mount-filesystems", "run", "syscalls", "--host"]
+        env:
+        - name: IG_EXPERIMENTAL
+          value: "true"
+        - name: HOST_ROOT
+          value: "/host"
+        securityContext:
+          privileged: true
+        volumeMounts:
+          - mountPath: /host
+            name: host
+          - mountPath: /run
+            name: run
+          - mountPath: /lib/modules
+            name: modules
+          - mountPath: /sys/kernel/debug
+            name: debugfs
+          - mountPath: /sys/fs/cgroup
+            name: cgroup
+          - mountPath: /sys/fs/bpf
+            name: bpffs
+      volumes:
+        - name: host
+          hostPath:
+            path: /
+        - name: run
+          hostPath:
+            path: /run
+        - name: cgroup
+          hostPath:
+            path: /sys/fs/cgroup
+        - name: modules
+          hostPath:
+            path: /lib/modules
+        - name: bpffs
+          hostPath:
+            path: /sys/fs/bpf
+        - name: debugfs
+          hostPath:
+            path: /sys/kernel/debug

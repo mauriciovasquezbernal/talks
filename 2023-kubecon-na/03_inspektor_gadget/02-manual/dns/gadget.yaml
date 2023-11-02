@@ -1,0 +1,4 @@
+name: dns
+description: provides metrics for dns requests and responses
+metrics:
+  dns:

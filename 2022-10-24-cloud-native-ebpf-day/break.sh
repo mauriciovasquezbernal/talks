@@ -7,10 +7,10 @@
 # first of all create a backup
 cp mydeployment.yaml mydeployment.yaml.backup
 
-# use a bad seccomp profile in one node
+# 1. use a bad seccomp profile in one node
 minikube cp myseccompprofile_bad.json minikube-m02:/var/lib/kubelet/seccomp/myseccompprofile.json
 
-# remove a needed capability
+# 2. remove a needed capability
 sed -i 's#              - NET_BIND_SERVICE##g' mydeployment.yaml
 
 # use bad port in the service

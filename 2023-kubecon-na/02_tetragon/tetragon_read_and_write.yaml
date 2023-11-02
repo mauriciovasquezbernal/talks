@@ -1,0 +1,12 @@
+apiVersion: cilium.io/v1alpha1
+kind: TracingPolicy
+metadata:
+  name: "read-and-write"
+spec:
+  kprobes:
+  - call: "sys_read"
+    syscall: true
+    # [...]
+  - call: "sys_write"
+    syscall: true
+    # [...]

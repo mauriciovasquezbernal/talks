@@ -7,7 +7,7 @@ set -e
 # For Inspektor Gadget
 #minikube start --nodes=2
 # For traditional tools
-minikube start --nodes=2 --driver=kvm --iso-url=file://$(pwd)/minikube-fanotify.iso
+minikube start --nodes=2 --driver=kvm #--iso-url=file://$(pwd)/minikube-fanotify.iso
 
 # create container image
 docker build -t mauriciovasquezbernal/mynginx:latest .

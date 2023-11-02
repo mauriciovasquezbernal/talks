@@ -1,0 +1,35 @@
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: ebpf-exporter
+  labels:
+    app: ebpf-exporter
+spec:
+  selector:
+    matchLabels:
+      app: ebpf-exporter
+  template:
+    metadata:
+      labels:
+        app: ebpf-exporter
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "9435"
+        prometheus.io/path: "/metrics"
+    spec:
+      hostPID: true
+      hostNetwork: true
+      containers:
+      - name: exporter
+        image: ghcr.io/cloudflare/ebpf_exporter:sha-8f4f46e
+        command: ["/ebpf_exporter"]
+        args: ["--config.dir=examples", "--config.names=syscalls,biolatency"]
+        securityContext:
+          privileged: true
+        volumeMounts:
+          - name: cgroup
+            mountPath: /sys/fs/cgroup
+      volumes:
+      - name: cgroup
+        hostPath:
+          path: /sys/fs/cgroup
