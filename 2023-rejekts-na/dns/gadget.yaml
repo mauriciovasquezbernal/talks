@@ -1,0 +1,99 @@
+name: dns
+description: trace dns requests and responses
+tracers:
+  dns:
+    mapName: events
+    structName: event_t
+structs:
+  event_t:
+    fields:
+    - name: timestamp
+      attributes:
+        template: timestamp
+    - name: src
+      description: Source endpoint
+      attributes:
+        minWidth: 24
+        maxWidth: 50
+    - name: dst
+      description: Destination endpoint
+      attributes:
+        minWidth: 24
+        maxWidth: 50
+    - name: pid
+      description: PID of the process that sent the request
+      attributes:
+        template: pid
+    - name: task
+      attributes:
+        template: comm
+    - name: uid
+      attributes:
+        hidden: true
+        template: uid
+    - name: gid
+      attributes:
+        hidden: true
+        template: uid
+    - name: name
+      attributes:
+        wasmHandler: true
+        width: 30
+    - name: qr
+      attributes:
+        width: 2
+    - name: pkt_type
+      attributes:
+        width: 8
+    - name: rcode
+      attributes:
+        width: 8
+    - name: latency_ns
+      attributes:
+        width: 8
+        hidden: true
+    - name: anaddr
+      attributes:
+        width: 16
+    - name: netns
+      description: 'Network namespace inode id'
+      attributes:
+        template: ns
+    - name: mntns_id
+      description: 'Mount namespace inode id'
+      attributes:
+        template: ns
+    - name: tid
+      description: 'TODO: Fill field description'
+      attributes:
+        width: 16
+        alignment: left
+        hidden: true
+        ellipsis: end
+    - name: id
+      description: 'TODO: Fill field description'
+      attributes:
+        width: 16
+        alignment: left
+        hidden: true
+        ellipsis: end
+    - name: qtype
+      description: 'TODO: Fill field description'
+      attributes:
+        width: 16
+        alignment: left
+        ellipsis: end
+    - name: ancount
+      description: 'TODO: Fill field description'
+      attributes:
+        width: 16
+        alignment: left
+        hidden: true
+        ellipsis: end
+    - name: anaddrcount
+      description: 'TODO: Fill field description'
+      attributes:
+        width: 16
+        alignment: left
+        hidden: true
+        ellipsis: end

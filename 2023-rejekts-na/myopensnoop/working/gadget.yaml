@@ -1,0 +1,30 @@
+name: opensnoop
+description: Trace process executions
+tracers:
+  events:
+    mapName: events
+    structName: event
+structs:
+  event:
+    fields:
+    - name: mntns
+      description: 'TODO: Fill field description'
+      attributes:
+        hidden: true
+        template: ns
+    - name: comm
+      description: 'TODO: Fill field description'
+      attributes:
+        width: 16
+        alignment: left
+        ellipsis: end
+    - name: pid
+      description: 'TODO: Fill field description'
+      attributes:
+        template: pid
+    - name: name
+      description: 'TODO: Fill field description'
+      attributes:
+        width: 40
+        alignment: left
+        ellipsis: end
