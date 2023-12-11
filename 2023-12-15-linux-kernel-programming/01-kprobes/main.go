@@ -48,7 +48,8 @@ func main() {
 	}
 	defer lExit.Close()
 
-	fmt.Print("Ready, press Ctrl+C to close: ")
+	fmt.Print("Run sudo cat /sys/kernel/debug/tracing/trace_pipe in another terminal to see the output\n")
+	fmt.Print("Press Ctrl+C to close: ")
 
 	// Graceful shutdown
 	exit := make(chan os.Signal, 1)

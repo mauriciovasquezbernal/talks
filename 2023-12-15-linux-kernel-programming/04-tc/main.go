@@ -74,7 +74,8 @@ func HostToNetShort(i uint16) uint16 {
 
 func main() {
 	if len(os.Args) < 2 {
-		log.Fatalf("Please specify a network interface")
+		fmt.Printf("Usage: %s <ifacename> <ip1> <ip2> ...\n", os.Args[0])
+		return
 	}
 
 	// Allow the current process to lock memory for eBPF resources.
