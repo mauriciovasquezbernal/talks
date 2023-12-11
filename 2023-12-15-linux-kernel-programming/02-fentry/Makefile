@@ -1,16 +1,24 @@
 .PHONY: all generate build clean run
 
+BPF_SOURCE=fentry.bpf.c
+EXECUTABLE=02-fentry
+BPF_OBJECTS=bpf_bpfel_x86.go bpf_bpfel_x86.o
+GO_SRC=main.go
+
 all: generate build
 
-generate:
+generate: ${BPF_OBJECTS}
+
+${BPF_OBJECTS}: ${BPF_SOURCE}
 	go generate .
 
-build:
+build: generate ${EXECUTABLE}
+
+${EXECUTABLE}: ${GO_SRC}
 	go build .
 
-run:
-	sudo ./02-fentry
+run: build
+	sudo ./${EXECUTABLE}
 
 clean:
-	rm 02-fentry
-	rm bpf_*
+	rm ${EXECUTABLE} ${BPF_OBJECTS}

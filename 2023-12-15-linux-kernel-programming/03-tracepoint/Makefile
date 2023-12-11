@@ -1,16 +1,24 @@
 .PHONY: all generate build clean run
 
+BPF_SOURCE=tracepoint.bpf.c
+EXECUTABLE=03-tracepoint
+BPF_OBJECTS=bpf_bpfeb.go  bpf_bpfeb.o  bpf_bpfel.go  bpf_bpfel.o
+GO_SRC=main.go
+
 all: generate build
 
-generate:
+generate: ${BPF_OBJECTS}
+
+${BPF_OBJECTS}: ${BPF_SOURCE}
 	go generate .
 
-build:
+build: generate ${EXECUTABLE}
+
+${EXECUTABLE}: ${GO_SRC}
 	go build .
 
-run:
-	sudo ./03-tracepoint
+run: build
+	sudo ./${EXECUTABLE}
 
 clean:
-	rm 03-tracepoint
-	rm bpf_*
+	rm ${EXECUTABLE} ${BPF_OBJECTS}
