@@ -53,8 +53,7 @@ type bpfSpecs struct {
 //
 // It can be passed ebpf.CollectionSpec.Assign.
 type bpfProgramSpecs struct {
-	SysEnterExecve *ebpf.ProgramSpec `ebpf:"sys_enter_execve"`
-	SysExitExecve  *ebpf.ProgramSpec `ebpf:"sys_exit_execve"`
+	SysEnterShutdown *ebpf.ProgramSpec `ebpf:"sys_enter_shutdown"`
 }
 
 // bpfMapSpecs contains maps before they are loaded into the kernel.
@@ -92,14 +91,12 @@ func (m *bpfMaps) Close() error {
 //
 // It can be passed to loadBpfObjects or ebpf.CollectionSpec.LoadAndAssign.
 type bpfPrograms struct {
-	SysEnterExecve *ebpf.Program `ebpf:"sys_enter_execve"`
-	SysExitExecve  *ebpf.Program `ebpf:"sys_exit_execve"`
+	SysEnterShutdown *ebpf.Program `ebpf:"sys_enter_shutdown"`
 }
 
 func (p *bpfPrograms) Close() error {
 	return _BpfClose(
-		p.SysEnterExecve,
-		p.SysExitExecve,
+		p.SysEnterShutdown,
 	)
 }
 

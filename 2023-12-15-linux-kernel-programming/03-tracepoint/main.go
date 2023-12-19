@@ -31,18 +31,11 @@ func main() {
 	defer objs.Close()
 
 	// Open a tracepoint and attach the pre-compiled program.
-	tpI, err := link.Tracepoint("syscalls", "sys_enter_execve", objs.SysEnterExecve, nil)
+	tpI, err := link.Tracepoint("syscalls", "sys_enter_shutdown", objs.SysEnterShutdown, nil)
 	if err != nil {
 		log.Fatalf("opening tracepoint: %s", err)
 	}
 	defer tpI.Close()
-
-	// Open a tracepoint and attach the pre-compiled program.
-	tpE, err := link.Tracepoint("syscalls", "sys_exit_execve", objs.SysExitExecve, nil)
-	if err != nil {
-		log.Fatalf("opening tracepoint: %s", err)
-	}
-	defer tpE.Close()
 
 	fmt.Print("Run sudo cat /sys/kernel/debug/tracing/trace_pipe in another terminal to see the output\n")
 	fmt.Print("Press Ctrl+C to close: ")
