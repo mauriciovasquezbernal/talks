@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: my-app
+  labels:
+    app: myapp
+spec:
+  containers:
+  - name: my-app
+    image: busybox
+    command:
+    - /bin/sh
+    - -c
+    - "while true; do nslookup -querytype=a example.com. && sleep 5; nslookup -querytype=a typo.test && sleep 5; done"
+  restartPolicy: Always

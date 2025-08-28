@@ -1,0 +1,16 @@
+{
+	"servers": {
+		"inspektor-gadget": {
+			"type": "stdio",
+			"command": "docker",
+			"args": [
+				"run",
+				"-i",
+				"--mount",
+				"type=bind,src=${env:HOME}/.kube/config,dst=/kubeconfig",
+				"ghcr.io/inspektor-gadget/ig-mcp-server:latest",
+				"-gadget-discoverer=artifacthub"
+			]
+		}
+  }
+}

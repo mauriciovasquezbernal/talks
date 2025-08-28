@@ -1,0 +1,16 @@
+# This gadget monitors executions of process called bash in the defualt
+# namespace
+apiVersion: 1
+kind: instance-spec
+image: trace_exec:main
+name: alert-bad-process
+paramValues:
+  # monitor only default namespace
+  operator.KubeManager.namespace: default
+  # monitor shell executions (only bash on this example)
+  operator.filter.filter: proc.comm==bash
+  # name of the metric to export
+  operator.otel-metrics.otel-metrics-name: 'exec:shell_executions'
+  # annotate gadget to enable metrics collection
+  operator.oci.annotate:
+    exec:metrics.collect=true,exec:metrics.implicit-counter.name=shell_executions,exec.k8s.namespace:metrics.type=key,exec.k8s.podname:metrics.type=key,exec.k8s.containername:metrics.type=key
