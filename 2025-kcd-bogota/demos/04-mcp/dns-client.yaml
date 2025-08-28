@@ -11,5 +11,5 @@ spec:
     command:
     - /bin/sh
     - -c
-    - "while true; do nslookup -querytype=a example.com. && sleep 5; nslookup -querytype=a typo.test && sleep 5; done"
+    - "while true; do nslookup -querytype=a example.com. && sleep 1; nslookup -querytype=a typo.test && sleep 1; done"
   restartPolicy: Always
