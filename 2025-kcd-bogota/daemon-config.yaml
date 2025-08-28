@@ -1,0 +1,6 @@
+operator:
+  otel-metrics:
+    otel-metrics-listen: true
+    otel-metrics-listen-address: 0.0.0.0:2223
+  env:
+    env-vars: NODE_NAME

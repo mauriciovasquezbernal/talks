@@ -1,0 +1,122 @@
+---
+# Server Deployment
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: tcp-server
+  labels:
+    app: tcp-server
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: tcp-server
+  template:
+    metadata:
+      labels:
+        app: tcp-server
+    spec:
+      containers:
+      - name: server
+        image: nicolaka/netshoot:latest
+        command: ["/bin/bash"]
+        args:
+          - "-c"
+          - |
+            # Start a simple TCP server on port 8080
+            while true; do
+              echo "HTTP/1.1 200 OK\r\nContent-Length: 13\r\n\r\nHello World!\n" | nc -l -p 8080
+            done
+        ports:
+        - containerPort: 8080
+          name: tcp-port
+        resources:
+          requests:
+            memory: "64Mi"
+            cpu: "50m"
+          limits:
+            memory: "128Mi"
+            cpu: "100m"
+
+---
+# Server Service
+apiVersion: v1
+kind: Service
+metadata:
+  name: tcp-server-service
+  labels:
+    app: tcp-server
+spec:
+  selector:
+    app: tcp-server
+  ports:
+  - port: 8080
+    targetPort: 8080
+    protocol: TCP
+    name: tcp-port
+  type: ClusterIP
+
+---
+# Client Deployment
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: tcp-client
+  labels:
+    app: tcp-client
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: tcp-client
+  template:
+    metadata:
+      labels:
+        app: tcp-client
+    spec:
+      containers:
+      - name: client
+        image: nicolaka/netshoot:latest
+        command: ["/bin/bash"]
+        args:
+          - "-c"
+          - |
+            # Wait for server to be ready
+            sleep 10
+
+            # Continuously send requests to the server
+            while true; do
+              echo "Sending request to tcp-server-service:8080..."
+              echo "GET / HTTP/1.1\r\nHost: tcp-server-service\r\n\r\n" | nc tcp-server-service 8080
+              echo "Response received, waiting 2 seconds..."
+              sleep 2
+            done
+        resources:
+          requests:
+            memory: "64Mi"
+            cpu: "50m"
+          limits:
+            memory: "128Mi"
+            cpu: "100m"
+
+---
+# Alternative: Client Pod for manual testing
+apiVersion: v1
+kind: Pod
+metadata:
+  name: tcp-client-manual
+  labels:
+    app: tcp-client-manual
+spec:
+  containers:
+  - name: client
+    image: nicolaka/netshoot:latest
+    command: ["/bin/sleep"]
+    args: ["3600"]
+    resources:
+      requests:
+        memory: "64Mi"
+        cpu: "50m"
+      limits:
+        memory: "128Mi"
+        cpu: "100m"
