@@ -1,0 +1,9 @@
+apiVersion: 1
+kind: instance-spec
+image: profile_blockio:latest
+name: profileblockio
+paramValues:
+  # name of the metric to export
+  operator.otel-metrics.otel-metrics-name: blockio:blockio-metrics-kcd
+  # annotate gadget to enable metrics collection
+  operator.oci.annotate: blockio:metrics.collect=true,blockio:env.fields.node=NODE_NAME,blockio.node:metrics.type=key

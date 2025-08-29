@@ -1,0 +1,30 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: stress-test-blockio-periodic
+  namespace: default
+spec:
+  # Run every 3 minutes
+  schedule: "*/3 * * * *"
+  jobTemplate:
+    spec:
+      template:
+        metadata:
+          labels:
+            app: stress-test-periodic
+        spec:
+          restartPolicy: Never
+          terminationGracePeriodSeconds: 0
+          nodeSelector:
+            agentpool: userpool
+          containers:
+          - name: stress
+            image: polinux/stress
+            command: ["stress"]
+            args: ["--hdd", "10", "--hdd-bytes", "512M", "--timeout", "60s"]
+      backoffLimit: 0
+  # Keep last 3 successful jobs and 1 failed job
+  successfulJobsHistoryLimit: 3
+  failedJobsHistoryLimit: 1
+  # Don't start new job if previous one is still running
+  concurrencyPolicy: Forbid
